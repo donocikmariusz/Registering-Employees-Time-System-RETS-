@@ -1,12 +1,12 @@
 ﻿namespace RETS
 {
-    public class TimeCalculator : System.Object
+    public class TimeCalculator
     {
-        public static TimeSpan SumTimeSpans(List<TimeSpan> timeSpans)
+        public static TimeSpan SumTimeSpans(List<TimeSpan> everyDayResult)
         {
             TimeSpan total = TimeSpan.Zero;
 
-            foreach (var timeSpan in timeSpans)
+            foreach (var timeSpan in everyDayResult)
             {
                 total = total.Add(timeSpan);
             }

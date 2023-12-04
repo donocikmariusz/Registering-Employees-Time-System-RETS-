@@ -10,7 +10,7 @@ namespace RETS
             DateTime.TryParseExact(intime, formats, null, System.Globalization.DateTimeStyles.None, out DateTime time1);
             DateTime.TryParseExact(outtime, formats, null, System.Globalization.DateTimeStyles.None, out DateTime time2);
             difference = time2 - time1;
-            Console.WriteLine($"Dnia {ktorydzien} parch był {Math.Abs(difference.Hours):D2} hour {Math.Abs(difference.Minutes):D2} minutes");
+            Console.WriteLine($"Dnia {ktorydzien} był {Math.Abs(difference.Hours):D2} hour {Math.Abs(difference.Minutes):D2} minutes");
             return difference;
         }
 

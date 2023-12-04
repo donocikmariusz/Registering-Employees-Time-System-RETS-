@@ -2,13 +2,13 @@
 {
     public class WorkTimeActions
     {
-        public static void PerformActionsBasedOnWorkedHours(double totalWorkedHours, double totalWorkHoursInMonth)
+        public static void PerformActionsBasedOnWorkedHourszwykły(double totalWorkedHours, double totalWorkHoursInMonth)
         {
             switch (totalWorkedHours)
             {
                 case double hours when hours == totalWorkHoursInMonth:
                     Console.WriteLine("Gratulacje! Przepracowałeś dokładnie tyle godzin, ile wynosi limit w miesiącu.");
-                
+
                     break;
 
                 case double hours when hours >= 0 && hours < 25:
@@ -39,6 +39,36 @@
                     Console.WriteLine("Coś poszło nie tak...");
                     break;
             }
+        }
+
+
+        public static void PerformActionsBasedOnWorkedHourssredni(double totalWorkedHours, double totalWorkHoursInMonth)
+        {
+            switch (totalWorkedHours)
+            {
+                case double hours when hours == totalWorkHoursInMonth:
+                    Console.WriteLine("Gratulacje! Przepracowałeś dokładnie tyle godzin, ile wynosi limit w miesiącu.");
+                                        break;
+
+                case double hours when hours >= totalWorkHoursInMonth:
+                    Console.WriteLine($"Przepracowano więcej w miesiącu");
+                    break;
+                case double hours when hours <= totalWorkHoursInMonth:
+                    Console.WriteLine($"Przepracowano mniej w miesiącu");
+                    break;
+
+
+                default:
+                    Console.WriteLine("Coś poszło nie tak...");
+                    break;
+            }
+        }
+
+        public static void PerformActionsBasedOnWorkedHoursnaczelny(double totalWorkedHours, double totalWorkHoursInMonth)
+        {
+
+            Console.WriteLine("Ten nie musi przychodzić w ogóle");
+
         }
     }
 }

@@ -1,13 +1,14 @@
-﻿namespace RETS
-{
-    public class zwyklyParch
-    {
-        public const string fileName = "czaszwykły.txt";
+﻿using static RETS.Parameters;
 
-        public static void HandleZwyklyParch()
+namespace RETS
+{
+    public class naczelny
+    {
+        public const string fileName = "czasnaczelny.txt";
+        public static void HandleNaczelny(List<TimeSpan> everyDayResult)
         {
-            List<TimeSpan> everyDayResult = new List<TimeSpan>();
-            Console.WriteLine("Wybrano 1 - zwykłego parcha produkcyjnego");
+
+            Console.WriteLine("Wybrano 3 - naczelny");
             int ktorydzien = 1;
 
             while (true)
@@ -33,6 +34,7 @@
 
                 Console.WriteLine("Podaj godzinę wyjścia w formacie hh:mm:");
                 string outtime = Console.ReadLine();
+
                 while (!TimeValidator.IsValidTime(outtime))
                 {
                     try
@@ -55,12 +57,12 @@
 
                 using (var writerin = File.AppendText(fileName))
                 {
-                    writerin.WriteLine(intime, intime);
+                    writerin.WriteLine(intime);
                 }
 
                 using (var writerout = File.AppendText(fileName))
                 {
-                    writerout.WriteLine(intime, outtime);
+                    writerout.WriteLine(outtime);
                 }
 
                 Console.WriteLine();
@@ -74,49 +76,15 @@
 
                 if (input == "s" || input == "S")
                 {
-                    TimeSpan osiemGodzin = TimeSpan.FromHours(8);
-                    Console.WriteLine("");
-                    Console.WriteLine("Statystki:");
-                    Console.WriteLine("");
-
-                    for (int i = 0; i < everyDayResult.Count; i++)
-                    {
-                        if (osiemGodzin < everyDayResult[i])
-                        {
-                            TimeSpan overtime = everyDayResult[i] - osiemGodzin;
-                            Console.WriteLine($"Dnia {i} parch był {Math.Abs(everyDayResult[i].Hours):D2} hour {Math.Abs(everyDayResult[i].Minutes):D2} minutes - nadczas wynosi {overtime.Hours} godzin {overtime.Minutes} minut");
-                        }
-
-                        else if (osiemGodzin > everyDayResult[i])
-                        {
-                            TimeSpan undertime = osiemGodzin - everyDayResult[i];
-                            Console.WriteLine($"Dnia {i} parch był {Math.Abs(everyDayResult[i].Hours):D2} hour {Math.Abs(everyDayResult[i].Minutes):D2} minutes - niedoczas wynosi: {undertime.Hours} godzin {undertime.Minutes} minut");
-                        }
-
-                        else
-                        {
-                            Console.WriteLine($"Dnia {i} parch był {Math.Abs(everyDayResult[i].Hours):D2} hour {Math.Abs(everyDayResult[i].Minutes):D2} minutes");
-                        }
-                    }
-                    // weź więcej z klasy parameters
-                    Parameters.showSummary();
 
                     DateTime currentDate = DateTime.Now;
-                    int workdays = WorkdayCounter.CountWorkdaysInMonth(currentDate.Year, currentDate.Month);
-                    Console.WriteLine("");
-                    Console.WriteLine($"Ilość dni roboczych w bieżącym miesiącu: {workdays}");
-
-                    // ile godzin roboczych w obecnym miesiacu
+                    TimeSpan totalWorkedTime = WorkdayCounter.SumTimeSpans(everyDayResult);
                     int workHoursPerDay = 8;
                     TimeSpan totalWorkHours = WorkdayCounter.CalculateTotalWorkHoursInMonth(currentDate.Year, currentDate.Month, workHoursPerDay);
-                    Console.WriteLine($"Łączna liczba godzin roboczych w bieżącym miesiącu: {totalWorkHours.TotalHours} godzin");
-
-                    // ile rzeczywiscie czasu przepracował
-                    TimeSpan totalWorkedTime = WorkdayCounter.SumTimeSpans(everyDayResult);
-                    Console.WriteLine($"Łączny czas przepracowany: {TimeCalculator.FormatTotalTime(totalWorkedTime)}");
+                    Parameters.showSummary(everyDayResult, currentDate, totalWorkedTime, totalWorkHours);
 
                     // podsumowanie jego godzin pracy
-                    WorkTimeActions.PerformActionsBasedOnWorkedHours(totalWorkedTime.TotalHours, totalWorkHours.TotalHours);
+                    WorkTimeActions.PerformActionsBasedOnWorkedHoursnaczelny(totalWorkedTime.TotalHours, totalWorkHours.TotalHours);
 
                 }
 
