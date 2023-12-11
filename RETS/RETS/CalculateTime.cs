@@ -6,12 +6,12 @@
 
         public CalculateTime(string intime, string outtime)
         {
-            this.Intime = ParseTime(intime);
-            this.Outtime = ParseTime(outtime);
+            this.Intime = intime;
+            this.Outtime = outtime;
         }
 
-        private DateTime Intime { get; set; }
-        private DateTime Outtime { get; set; }
+        private string Intime { get; set; }
+        private string Outtime { get; set; }
 
         public TimeSpan EveryDayResult
         {
@@ -20,6 +20,7 @@
                 return everyDayResult.Count > 0
             ? everyDayResult.Aggregate((acc, ts) => acc.Add(ts))
             : TimeSpan.Zero;
+
             }
         }
 
@@ -28,7 +29,6 @@
             get
             {
                 var totalResult = EveryDayResult;
-
                 int totalHours = (int)totalResult.TotalHours;
                 int minutes = totalResult.Minutes;
 
@@ -38,17 +38,13 @@
         }
 
         public TimeSpan Difference { get; private set; }
+        public TimeSpan Doba { get; private set; }
 
-        public void AddTimeDifference(string newIntime, string newOuttime)
+        public void AddTimeDifference(DateTime newTime1, DateTime newTime2)
         {
-            DateTime newTime1 = ParseTime(newIntime);
-            DateTime newTime2 = ParseTime(newOuttime);
 
             Difference = newTime2 - newTime1;
             everyDayResult.Add(Difference);
-
-            this.Intime = newTime1;
-            this.Outtime = newTime2;
         }
 
         public static TimeSpan SumTimeSpans(List<TimeSpan> result)
@@ -56,13 +52,17 @@
             return result.Aggregate(TimeSpan.Zero, (acc, ts) => acc.Add(ts));
         }
 
-        private DateTime ParseTime(string timeString)
+        public static string FormatTotalTime(TimeSpan total)
         {
-            string[] formats = { "H:mm", "HH:mm", "H:m", "HH:m" };
-            DateTime.TryParseExact(timeString, formats, null, System.Globalization.DateTimeStyles.None, out DateTime time);
-            return time;
+            return $"{total.TotalHours:N0} godzin {total.Minutes} minut";
         }
 
+        public void AddCalculated24h(DateTime newTime1, DateTime newTime2)
+        {
+            TimeSpan doba = TimeSpan.FromHours(24);
 
+            Doba = (TimeSpan.FromHours(24) - (newTime1 - newTime2));
+            everyDayResult.Add(Doba);
+        }
     }
 }

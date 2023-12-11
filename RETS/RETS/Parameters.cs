@@ -1,4 +1,5 @@
-﻿namespace RETS
+﻿
+namespace RETS
 {
     public class Parameters
     {
@@ -22,8 +23,7 @@
         {
             // ile dni roboczych w danym miesiacu
             int workdays = WorkdayCounter.CountWorkdaysInMonth(this.currentDate.Year, this.currentDate.Month);
-            Console.WriteLine("");
-            Console.WriteLine($"Ilość dni roboczych w bieżącym miesiącu: {workdays}");
+                      Console.WriteLine($"Ilość dni roboczych w bieżącym miesiącu: {workdays}");
         }
 
         public void GetMonthlyHours()
@@ -37,15 +37,26 @@
         {
             // ile rzeczywiscie czasu przepracował
             TimeSpan totalWorkedTime = CalculateTime.SumTimeSpans(new List<TimeSpan> { time1.EveryDayResult });
-            Console.WriteLine($"Łączny czas przepracowany: {TimeCalculator.FormatTotalTime(totalWorkedTime)}");
+            Console.WriteLine($"Łączny czas przepracowany: {CalculateTime.FormatTotalTime(totalWorkedTime)}");
         }
 
         public void showSummary(CalculateTime time1)
         {
+
+            TotalWorkingHours(time1);
+            GetDaysInCurrentMonth();
+            GetCurrentMonthName();
+            GetMonthlyWorkingDays();
+            GetMonthlyHours();
+        }
+
+        public void EveryDaySummary(CalculateTime time1)
+        {
+
+            Console.WriteLine("Statystki z każdego dnia:");
+            Console.WriteLine("");
+
             TimeSpan osiemGodzin = TimeSpan.FromHours(8);
-            Console.WriteLine("");
-            Console.WriteLine("Statystki:");
-            Console.WriteLine("");
 
             for (int i = 0; i < time1.everyDayResult.Count; i++)
             {
@@ -64,9 +75,9 @@
                     Console.WriteLine($"Dnia {i + 1} był {Math.Abs(time1.everyDayResult[i].Hours):D2} godzin {Math.Abs(time1.everyDayResult[i].Minutes):D2} minut");
                 }
             }
-
         }
-
     }
 
 }
+
+
