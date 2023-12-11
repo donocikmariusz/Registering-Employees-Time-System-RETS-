@@ -1,5 +1,4 @@
-﻿
-namespace RETS
+﻿namespace RETS
 {
     public class TimeValidator
     {
@@ -24,4 +23,3 @@ namespace RETS
 
     }
 }
-

@@ -2,11 +2,11 @@
 {
     public class TimeCalculator
     {
-        public static TimeSpan SumTimeSpans(List<TimeSpan> everyDayResult)
+        public static TimeSpan SumTimeSpans(List<TimeSpan> result)
         {
             TimeSpan total = TimeSpan.Zero;
 
-            foreach (var timeSpan in everyDayResult)
+            foreach (var timeSpan in result)
             {
                 total = total.Add(timeSpan);
             }

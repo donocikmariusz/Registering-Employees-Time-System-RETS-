@@ -18,13 +18,7 @@
                     workdays++;
                 }
             }
-
             return workdays;
-        }
-
-        public static TimeSpan SumTimeSpans(List<TimeSpan> everyDayResult)
-        {
-            return TimeCalculator.SumTimeSpans(everyDayResult);
         }
 
         // obliczenie ile godzin roboczych jest w danym miesiącu na podstawie jego ilości dni roboczych

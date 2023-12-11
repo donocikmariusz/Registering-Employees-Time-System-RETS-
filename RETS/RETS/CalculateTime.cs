@@ -1,41 +1,68 @@
-﻿
-
-namespace RETS
+﻿namespace RETS
 {
     public class CalculateTime
     {
-        public static TimeSpan TotalTimeForOneDay(string intime, string outtime, int ktorydzien, out TimeSpan difference)
+        public List<TimeSpan> everyDayResult = new List<TimeSpan>();
+
+        public CalculateTime(string intime, string outtime)
         {
-            string[] formats = { "H:mm", "HH:mm" };
-            DateTime.TryParseExact(intime, formats, null, System.Globalization.DateTimeStyles.None, out DateTime time1);
-            DateTime.TryParseExact(outtime, formats, null, System.Globalization.DateTimeStyles.None, out DateTime time2);
-            difference = time2 - time1;
-            Console.WriteLine($"Dnia {ktorydzien} był {Math.Abs(difference.Hours):D2} hour {Math.Abs(difference.Minutes):D2} minutes");
-            return difference;
+            this.Intime = ParseTime(intime);
+            this.Outtime = ParseTime(outtime);
         }
 
-        public static TimeSpan SumTimeSpans(List<TimeSpan> timeSpans)
-        {
-            TimeSpan total = TimeSpan.Zero;
+        private DateTime Intime { get; set; }
+        private DateTime Outtime { get; set; }
 
-            foreach (var timeSpan in timeSpans)
+        public TimeSpan EveryDayResult
+        {
+            get
             {
-                total = total.Add(timeSpan);
+                return everyDayResult.Count > 0
+            ? everyDayResult.Aggregate((acc, ts) => acc.Add(ts))
+            : TimeSpan.Zero;
             }
-
-            return total;
         }
+
+        public string FormattedEveryDayResult
+        {
+            get
+            {
+                var totalResult = EveryDayResult;
+
+                int totalHours = (int)totalResult.TotalHours;
+                int minutes = totalResult.Minutes;
+
+                string formattedResult = $"{totalHours} godzin, {minutes} minut";
+                return formattedResult;
+            }
+        }
+
+        public TimeSpan Difference { get; private set; }
+
+        public void AddTimeDifference(string newIntime, string newOuttime)
+        {
+            DateTime newTime1 = ParseTime(newIntime);
+            DateTime newTime2 = ParseTime(newOuttime);
+
+            Difference = newTime2 - newTime1;
+            everyDayResult.Add(Difference);
+
+            this.Intime = newTime1;
+            this.Outtime = newTime2;
+        }
+
+        public static TimeSpan SumTimeSpans(List<TimeSpan> result)
+        {
+            return result.Aggregate(TimeSpan.Zero, (acc, ts) => acc.Add(ts));
+        }
+
+        private DateTime ParseTime(string timeString)
+        {
+            string[] formats = { "H:mm", "HH:mm", "H:m", "HH:m" };
+            DateTime.TryParseExact(timeString, formats, null, System.Globalization.DateTimeStyles.None, out DateTime time);
+            return time;
+        }
+
+
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
