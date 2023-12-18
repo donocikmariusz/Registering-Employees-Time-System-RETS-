@@ -4,47 +4,53 @@
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Program do monitorowania czasu pracy pracowników");
-            Console.WriteLine("------------------------------------------------");
-            Console.WriteLine("Wybierz czy program ma:");
-            Console.WriteLine("1. - Tylko zebrać i zanalizować statystyki");
-            Console.WriteLine("2. - Zebrać i zanalizować statystyki i zrzucić je do pliku .txt");
-            Console.WriteLine("Twój wybór: (lub 'q' lub 'Q' żeby wyjść)");
-
             bool exitApp = false;
 
             while (!exitApp)
             {
-                var wybor = Console.ReadLine().ToUpper();
-
-                switch (wybor)
+                try
                 {
-                    case "1":
-                        OnlyCalculateandShowTime();
-                        break;
+                    Console.WriteLine("Program do monitorowania czasu pracy pracowników");
+                    Console.WriteLine("------------------------------------------------");
+                    Console.WriteLine("Wybierz rodzaj pracownika:");
+                    Console.WriteLine("1. - Produkcyjny ( pracujący zmianowo - zapis do pliku)");
+                    Console.WriteLine("2. - Zadaniowy (pracujący hybrydowo - zapis tylko do pamięci)");
+                    Console.WriteLine("Twój wybór: (lub 'q' lub 'Q' żeby wyjść)");
+                    var wybor = Console.ReadLine().ToUpper();
 
-                    case "2":
-                        OnlyCalculateandShowTime();
-                        break;
+                    switch (wybor)
+                    {
+                        case "1":
+                            ManufacturingWorker();
+                            break;
 
-                    case "Q":
-                        exitApp = true;
-                        break;
+                        case "2":
+                          //  HybridWorker();
+                            break;
 
-                    default:
-                        Console.WriteLine("Something went wrong...");
-                        continue;
+                        case "Q":
+                            exitApp = true;
+                            break;
+
+                        default:
+                            throw new Exception("Something went wrong...");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
                 break;
             }
         }
 
-        private static void OnlyCalculateandShowTime()
+        private static void ManufacturingWorker()
         {
             int ktorydzien = 1;
-            CalculateTime time1 = new CalculateTime("", "") ;
-            User user1 = new User("Jarosław", "Kaczyński");
 
+            User user1 = new User("Jarosław", "Kaczyński");
+           
             bool exitApp = false;
 
             while (!exitApp)
@@ -54,8 +60,10 @@
                 while (!exitLoop)
                 {
                     Console.WriteLine($"Dzień: {ktorydzien}");
+
                     string intime = GetTimeFromUser("Podaj godzinę wejścia w formacie hh:mm:");
                     string outtime = GetTimeFromUser("Podaj godzinę wyjścia w formacie hh:mm:");
+                    var worker1time = new ManufacturingWorker(intime, outtime);
 
                     DateTime newTime1 = ParseTime(intime);
                     DateTime newTime2 = ParseTime(outtime);
@@ -63,82 +71,139 @@
                     if (newTime2 > newTime1)
                     {
                         exitLoop = true;
-                        time1.AddTimeDifference(newTime1, newTime2);
+                        worker1time.AddTimeDifference(newTime1, newTime2);
+                        Console.WriteLine($"Dnia {ktorydzien} {user1.Name} {user1.Surname} był : {worker1.Difference}");
                     }
 
                     else
                     {
-                        Console.WriteLine("Nie mógł przenieść się w czasie... Czy doliczyć mu prawie dobę? T-TAK, N-NIE");
-                        var input3 = Console.ReadLine().ToUpper();
-
-                        switch (input3)
+                        bool loop = false;
+                        while (!loop)
                         {
-                            case "T":
-                                time1.AddCalculated24h(newTime1, newTime2);
+                            try
+                            {
+                                Console.WriteLine("Czy nastąpiło przenieniesienie na dzień następny? T-TAK, N-NIE");
+                                var input3 = Console.ReadLine().ToUpper();
 
-                                break;
+                                switch (input3)
+                                {
+                                    case "T":
+                                        loop = true;
+                                        worker1time.AddCalculated24h(newTime1, newTime2);
+                                        Console.WriteLine($"Dnia {ktorydzien} {user1.Name} {user1.Surname} był : {worker1.Doba}");
 
-                            case "N":
-                                ktorydzien--;
-                                exitLoop = true;
-                                break;
+                                        break;
 
-                            default:
-                                Console.WriteLine("Something went wrong...");
+                                    case "N":
+                                        ktorydzien--;
+                                        loop = true;
+                                        continue;
+
+                                    default:
+                                        throw new Exception("Something went wrong...");
+                                }
                                 break;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
                         }
-                        break;
                     }
-
+                    break;
                 }
 
                 Console.WriteLine();
-                string difference = time1.FormattedEveryDayResult;
-                Console.WriteLine($"Dnia {ktorydzien} {user1.Name} {user1.Surname} był : {difference}");
+                var statistics = worker1time.GetStatistics();
+
                 ktorydzien++;
+                bool checkinput = false;
 
-                Console.WriteLine("Naciśnij 'S' aby wyświetlić podsumowanie lub 'Q' aby wyjść lub Enter aby kontynuuować");
-                Console.WriteLine();
-
-                var input = Console.ReadLine();
-
-                if (input == "s" || input == "S")
+                while (!checkinput)
                 {
-                    Parameters parameter = new Parameters();
-                    parameter.showSummary(time1);
-
+                    Console.WriteLine("Naciśnij 'S' aby wyświetlić podsumowanie lub 'Q' aby wyjść lub Enter aby kontynuuować");
                     Console.WriteLine();
-                    Console.WriteLine("Czy wyświetlić statystyki z każdego dnia? Y - YES, N - NO");
-                    var input2 = Console.ReadLine().ToUpper();
+   
 
-                    switch (input2)
+                    try
                     {
-                        case "Y":
-                            parameter.EveryDaySummary(time1);
-                            break;
-                        case "N":
+                        ConsoleKeyInfo keyInfo = Console.ReadKey();
+
+                        if (keyInfo.Key == ConsoleKey.S)
+                        {
+                            checkinput = true;
+
+                            Console.WriteLine($"Liczba dni w bieżącym miesiącu: {statistics.DaysInCurrentMonth}");
+                            Console.WriteLine($"Nazwa obecnego miesiąca: {statistics.CurrentMonthName}");
+                            Console.WriteLine($"Ilość dni roboczych w bieżącym miesiącu: {statistics.Workdays}");
+                            Console.WriteLine($"Łączna liczba godzin roboczych w bieżącym miesiącu: {statistics.CalculateTotalWorkHoursInMonthFormatted}");
+                            Console.WriteLine($"Łączny czas przepracowany: {statistics.TotalWorkedTime}");
+                            Console.WriteLine();
+
+                            var summary = new ManufacturingWorker();
+
+                            bool input2a = false;
+
+                            while (!input2a)
+                            {
+                                try
+                                {
+                                    Console.WriteLine("Czy wyświetlić statystyki z każdego dnia? Y - YES, N - NO");
+                                    var input2 = Console.ReadLine().ToUpper();
+
+                                    switch (input2)
+                                    {
+                                        case "Y":
+                                            exitApp = true;
+                                            worker1.EveryDaySummary();
+                                            try
+                                            {
+                                                summary.PerformActionsBasedOnWorkedHourszwykły(statistics.TotalWorkHours, statistics.TotalWorkedTime);
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Console.WriteLine($"{ex.Message}");
+                                            }
+                                            break;
+                                        case "N":
+                                            input2a = true;
+                                            exitApp = true;
+                                            break;
+                                        default:
+                                            throw new Exception();
+                                    }
+                                    break;
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
+                            }
+                        }
+
+                        else if (keyInfo.Key == ConsoleKey.Q)
+
+                        {
                             exitApp = true;
                             break;
-                        default:
-                            Console.WriteLine("Something went wrong...");
-                            break;
+                        }
+
+                        else if (keyInfo.Key == ConsoleKey.Enter)
+                        {
+                            checkinput = true;
+                        }
+
+                        else
+                        {
+                            throw new Exception();
+                        }
                     }
-                    break;
 
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 }
-
-
-                else if (input == "Q" || input == "q")
-
-                {
-                    break;
-                }
-
-                else
-                {
-                    continue;
-                }
-
             }
         }
         static string GetTimeFromUser(string text)
@@ -146,16 +211,22 @@
             while (true)
             {
                 Console.WriteLine(text);
-                string userInput = Console.ReadLine();
+                try
+                {
+                    string userInput = Console.ReadLine();
+                    if (!IsValidTime(userInput))
+                    {
+                        throw new Exception("Błędny format godziny.Poprawny format to max 24 dla hh: max 60 dla mm.");
+                    }
+                    else
+                    {
+                        return userInput;
+                    }
+                }
 
-                if (!TimeValidator.IsValidTime(userInput))
-                {
-                    Console.WriteLine("\"Błędny format godziny.Poprawny format to max 24 dla hh: max 60 dla mm.");
-                }
-                else
-                {
-                    return userInput;
-                }
+                catch (Exception e)
+                { Console.WriteLine(e.Message); }
+
             }
         }
         static DateTime ParseTime(string timeString)
@@ -163,6 +234,23 @@
             string[] formats = { "H:mm", "HH:mm", "H:m", "HH:m" };
             DateTime.TryParseExact(timeString, formats, null, System.Globalization.DateTimeStyles.None, out DateTime time);
             return time;
+        }
+
+        public static bool IsValidTime(string intime)
+        {
+
+            // Podział wprowadzonego czasu na godziny i minuty
+            string[] parts = intime.Split(':');
+
+            if (parts.Length == 2)
+            {
+                // Sprawdzenie, czy godziny i minuty są liczbami całkowitymi w odpowiednich zakresach
+                if (int.TryParse(parts[0], out int hours) && int.TryParse(parts[1], out int minutes))
+                {
+                    return hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60;
+                }
+            }
+            return false;
         }
     }
 }
