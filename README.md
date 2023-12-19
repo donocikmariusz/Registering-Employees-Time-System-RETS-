@@ -1,4 +1,4 @@
-Program jest prostym narzędziem do śledzenia czasu bycia w pracy pracownika. Umożliwia wprowadzenie czasu wejścia i wyjścia pracownika każdego dnia, a następnie wyświetla statystyki:
+Program jest prostym narzędziem do śledzenia czasu bycia w pracy pracownika. Umożliwia wprowadzenie czasu wejścia i wyjścia pracownika każdego dnia, a następnie wyświetla statystyki.
 
 Funkcje programu:
 Podsumowanie Każdego Dnia:
