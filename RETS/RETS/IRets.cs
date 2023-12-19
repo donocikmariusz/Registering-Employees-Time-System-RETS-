@@ -1,4 +1,6 @@
 ﻿
+using static RETS.WorkerBase;
+
 namespace RETS
 {
     public interface IRets
@@ -10,5 +12,6 @@ namespace RETS
         void EveryDaySummary();
         Statistics GetStatistics();
         void ShowStatistics();
+        event TimeAddedDelegate TimeAdded;
     }
 }

@@ -6,6 +6,7 @@ namespace RETS
     public class ManufacturingWorker : WorkerBase, IRets
     {
         private const string fileName = "times.txt";
+        public override event TimeAddedDelegate TimeAdded;
 
         private List<TimeSpan> everyDayResult = new List<TimeSpan>();
         private readonly TimeSpan osiemGodzin = TimeSpan.FromHours(8);
@@ -16,12 +17,17 @@ namespace RETS
         }
         public string Intime { get; private set; }
         public string Outtime { get; private set; }
-     
+
         public override void AddCalculated24h(DateTime newTime1, DateTime newTime2)
         {
             TimeSpan doba = TimeSpan.FromHours(24);
             Doba = (TimeSpan.FromHours(24) - (newTime1 - newTime2));
             everyDayResult.Add(Doba);
+
+            if (TimeAdded != null)
+            {
+                TimeAdded(this, new EventArgs());
+            }
 
             using (var writer = File.AppendText(fileName))
             {
@@ -33,6 +39,11 @@ namespace RETS
             Difference = newTime2 - newTime1;
             everyDayResult.Add(Difference);
 
+            if (TimeAdded != null)
+            {
+                TimeAdded(this, new EventArgs());
+            }
+
             using (var writer = File.AppendText(fileName))
             {
                 writer.WriteLine($"{Difference.Hours}:{Difference.Minutes:D2}");
@@ -40,24 +51,25 @@ namespace RETS
         }
         public override void EveryDaySummary()
         {
+            var timesFromFile = this.ReadTimesFromFile();
             Console.WriteLine("Statystki z każdego dnia:");
             Console.WriteLine("");
 
-            for (int i = 0; i < everyDayResult.Count; i++)
+            for (int i = 0; i < timesFromFile.Count; i++)
             {
-                if (osiemGodzin < everyDayResult[i])
+                if (osiemGodzin < timesFromFile[i])
                 {
-                    TimeSpan overtime = everyDayResult[i] - osiemGodzin;
-                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(everyDayResult[i].Hours):D2} godzin {Math.Abs(everyDayResult[i].Minutes):D2} minut - nadczas wynosi {overtime.Hours} godzin {overtime.Minutes} minut");
+                    TimeSpan overtime = timesFromFile[i] - osiemGodzin;
+                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(timesFromFile[i].Hours):D2} godzin {Math.Abs(timesFromFile[i].Minutes):D2} minut - nadczas wynosi {overtime.Hours} godzin {overtime.Minutes} minut");
                 }
-                else if (osiemGodzin > everyDayResult[i])
+                else if (osiemGodzin > timesFromFile[i])
                 {
-                    TimeSpan undertime = osiemGodzin - everyDayResult[i];
-                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(everyDayResult[i].Hours):D2} godzin {Math.Abs(everyDayResult[i].Minutes):D2} minut - niedoczas wynosi: {undertime.Hours} godzin {undertime.Minutes} minut");
+                    TimeSpan undertime = osiemGodzin - timesFromFile[i];
+                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(timesFromFile[i].Hours):D2} godzin {Math.Abs(timesFromFile[i].Minutes):D2} minut - niedoczas wynosi: {undertime.Hours} godzin {undertime.Minutes} minut");
                 }
                 else
                 {
-                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(everyDayResult[i].Hours):D2} godzin {Math.Abs(everyDayResult[i].Minutes):D2} czyli jest dokładny co do minuty");
+                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(timesFromFile[i].Hours):D2} godzin {Math.Abs(timesFromFile[i].Minutes):D2} czyli jest dokładny co do minuty");
                 }
             }
         }
@@ -80,16 +92,21 @@ namespace RETS
                     var line = reader.ReadLine();
                     while (line != null)
                     {
-                        var number = float.Parse(line);
-                        everyDayResult.Add(Difference);
+                        var parts = line.Split(':');
+                        if (parts.Length == 2 && int.TryParse(parts[0], out int hours) && int.TryParse(parts[1], out int minutes))
+                        {
+                            var timeSpan = new TimeSpan(hours, minutes, 0);
+                            times.Add(timeSpan);
+                        }
                         line = reader.ReadLine();
                     }
                 }
             }
-            return everyDayResult;
+            return times;
         }
 
-        private Statistics CountStatistics(List<TimeSpan> everyDayResult)
+
+        public Statistics CountStatistics(List<TimeSpan> times)
         {
             var statistics = new Statistics();
             statistics.CurrentDate = DateTime.Now;
@@ -102,7 +119,7 @@ namespace RETS
             statistics.TotalWorkDays = CalculateTotalWorkHoursInMonth(statistics.CurrentDate.Year, statistics.CurrentDate.Month, workHoursPerDay);
             statistics.CalculateTotalWorkHoursInMonthFormatted = CalculateTotalWorkHoursInMonthFormatted(statistics.CurrentDate.Year, statistics.CurrentDate.Month, workHoursPerDay);
 
-            foreach (TimeSpan totalWorkedTime in everyDayResult)
+            foreach (TimeSpan totalWorkedTime in times)
             {
                 statistics.TotalWorkedTime += totalWorkedTime;
             }

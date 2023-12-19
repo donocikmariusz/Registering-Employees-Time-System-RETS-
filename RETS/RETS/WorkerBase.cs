@@ -2,6 +2,8 @@
 {
     public abstract class WorkerBase : IRets
     {
+        public delegate void TimeAddedDelegate(object sender, EventArgs args);
+        public abstract event TimeAddedDelegate TimeAdded;
         public WorkerBase(string intime, string outtime)
         {
             this.Intime = intime;
@@ -53,6 +55,5 @@
             int totalHours = totalWorkdays * workHoursPerDay;
             return $"{totalHours} godzin";
         }
-
     }
 }

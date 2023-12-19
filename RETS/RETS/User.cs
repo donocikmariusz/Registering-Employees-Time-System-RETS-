@@ -1,5 +1,4 @@
-﻿
-namespace RETS
+﻿namespace RETS
 {
     public class User
     {
@@ -8,8 +7,8 @@ namespace RETS
             this.Name = name;
             this.Surname = surname;
         }
-        public string Name { get; private set; }
-        public string Surname { get; private set; }            
+        public virtual string Name { get; private set; }
+        public virtual string Surname { get; private set; }            
     }
 }
 
