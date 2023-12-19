@@ -9,6 +9,6 @@ namespace RETS
         void AddCalculated24h(DateTime newTime1, DateTime newTime2);
         void EveryDaySummary();
         Statistics GetStatistics();
-        void PerformActionsBasedOnWorkedHourszwykły(TimeSpan totalWorkHoursInMonth, TimeSpan totalWorkHours);
+        void ShowStatistics();
     }
 }

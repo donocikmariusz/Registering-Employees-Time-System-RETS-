@@ -25,7 +25,7 @@
                             break;
 
                         case "2":
-                          //  HybridWorker();
+                            //  HybridWorker();
                             break;
 
                         case "Q":
@@ -50,8 +50,10 @@
             int ktorydzien = 1;
 
             User user1 = new User("Jarosław", "Kaczyński");
-           
+
             bool exitApp = false;
+            var worker1time = new ManufacturingWorker("", "");
+            var statistics = new Statistics();
 
             while (!exitApp)
             {
@@ -63,8 +65,6 @@
 
                     string intime = GetTimeFromUser("Podaj godzinę wejścia w formacie hh:mm:");
                     string outtime = GetTimeFromUser("Podaj godzinę wyjścia w formacie hh:mm:");
-                    var worker1time = new ManufacturingWorker(intime, outtime);
-
                     DateTime newTime1 = ParseTime(intime);
                     DateTime newTime2 = ParseTime(outtime);
 
@@ -72,7 +72,7 @@
                     {
                         exitLoop = true;
                         worker1time.AddTimeDifference(newTime1, newTime2);
-                        Console.WriteLine($"Dnia {ktorydzien} {user1.Name} {user1.Surname} był : {worker1.Difference}");
+                        Console.WriteLine($"Dnia {ktorydzien} {user1.Name} {user1.Surname} był : {worker1time.Difference.Hours}h {worker1time.Difference.Minutes}min");
                     }
 
                     else
@@ -90,7 +90,7 @@
                                     case "T":
                                         loop = true;
                                         worker1time.AddCalculated24h(newTime1, newTime2);
-                                        Console.WriteLine($"Dnia {ktorydzien} {user1.Name} {user1.Surname} był : {worker1.Doba}");
+                                        Console.WriteLine($"Dnia {ktorydzien} {user1.Name} {user1.Surname} był : {worker1time.Doba.Hours}h {worker1time.Doba.Minutes}min");
 
                                         break;
 
@@ -114,7 +114,6 @@
                 }
 
                 Console.WriteLine();
-                var statistics = worker1time.GetStatistics();
 
                 ktorydzien++;
                 bool checkinput = false;
@@ -123,7 +122,6 @@
                 {
                     Console.WriteLine("Naciśnij 'S' aby wyświetlić podsumowanie lub 'Q' aby wyjść lub Enter aby kontynuuować");
                     Console.WriteLine();
-   
 
                     try
                     {
@@ -131,16 +129,10 @@
 
                         if (keyInfo.Key == ConsoleKey.S)
                         {
+                            Console.WriteLine("");
                             checkinput = true;
 
-                            Console.WriteLine($"Liczba dni w bieżącym miesiącu: {statistics.DaysInCurrentMonth}");
-                            Console.WriteLine($"Nazwa obecnego miesiąca: {statistics.CurrentMonthName}");
-                            Console.WriteLine($"Ilość dni roboczych w bieżącym miesiącu: {statistics.Workdays}");
-                            Console.WriteLine($"Łączna liczba godzin roboczych w bieżącym miesiącu: {statistics.CalculateTotalWorkHoursInMonthFormatted}");
-                            Console.WriteLine($"Łączny czas przepracowany: {statistics.TotalWorkedTime}");
-                            Console.WriteLine();
-
-                            var summary = new ManufacturingWorker();
+                            worker1time.ShowStatistics();
 
                             bool input2a = false;
 
@@ -150,15 +142,14 @@
                                 {
                                     Console.WriteLine("Czy wyświetlić statystyki z każdego dnia? Y - YES, N - NO");
                                     var input2 = Console.ReadLine().ToUpper();
-
                                     switch (input2)
                                     {
                                         case "Y":
                                             exitApp = true;
-                                            worker1.EveryDaySummary();
                                             try
                                             {
-                                                summary.PerformActionsBasedOnWorkedHourszwykły(statistics.TotalWorkHours, statistics.TotalWorkedTime);
+                                                worker1time.EveryDaySummary();
+                                             
                                             }
                                             catch (Exception ex)
                                             {
@@ -231,18 +222,17 @@
         }
         static DateTime ParseTime(string timeString)
         {
-            string[] formats = { "H:mm", "HH:mm", "H:m", "HH:m" };
+            string[] formats = { "H:mm", "HH:mm" };
             DateTime.TryParseExact(timeString, formats, null, System.Globalization.DateTimeStyles.None, out DateTime time);
             return time;
         }
 
         public static bool IsValidTime(string intime)
         {
-
             // Podział wprowadzonego czasu na godziny i minuty
             string[] parts = intime.Split(':');
 
-            if (parts.Length == 2)
+            if (parts.Length == 2 && parts[0].Length <= 2 && parts[1].Length == 2)
             {
                 // Sprawdzenie, czy godziny i minuty są liczbami całkowitymi w odpowiednich zakresach
                 if (int.TryParse(parts[0], out int hours) && int.TryParse(parts[1], out int minutes))
@@ -250,6 +240,7 @@
                     return hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60;
                 }
             }
+
             return false;
         }
     }

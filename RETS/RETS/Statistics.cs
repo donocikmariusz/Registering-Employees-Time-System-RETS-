@@ -12,6 +12,8 @@ namespace RETS
         public TimeSpan TotalWorkedTime { get; set; }
         public TimeSpan OsiemGodzin { get; set; }
         public string CalculateTotalWorkHoursInMonthFormatted { get; set; }
+        public string TotalTimeFormatted { get; set; }
+        public string SumAssesment { get; set; }
 
     }
 }
