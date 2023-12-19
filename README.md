@@ -21,15 +21,14 @@ Podsumowuje łączny czas przepracowany przez pracownika w danym miesiącu.
 Podsumowanie z Każdego Dnia na Życzenie:
 Na żądanie użytkownika program wyświetla szczegółowe podsumowanie z każdego dnia, prezentując czas pracy i ewentualne nadgodziny.
 
-
-Funkcje Dodatkowe dla Pracownika Pracującego Hybrydowo:
+Funkcje Dodatkowe dla Pracownika Pracującego Zmianowo:
 Zapisywanie Czasów do Pliku .txt:
 
-Dla pracowników pracujących hybrydowo, program umożliwia zapisywanie czasów wejścia i wyjścia do pliku tekstowego.
+Dla pracowników pracujących zmianowo, program umożliwia zapisywanie czasów wejścia i wyjścia do pliku tekstowego.
 Po zakończeniu wprowadzania danych, użytkownik ma możliwość zapisania zebranych informacji do pliku, co pozwala na ich archiwizację.
 Odczytywanie Czasów z Pliku .txt:
 
-Przy ponownym uruchomieniu programu, dla pracowników pracujących hybrydowo, istnieje opcja wczytania wcześniej zapisanych czasów z pliku tekstowego.
+Przy ponownym uruchomieniu programu, dla pracowników pracujących zmianowo (opcja 1), istnieje opcja wczytania wcześniej zapisanych czasów z pliku tekstowego.
 Program automatycznie rozpoznaje i wczytuje istniejące dane, uwzględniając je w bieżącej sesji pracy.
 
 Ograniczenia Programu:
