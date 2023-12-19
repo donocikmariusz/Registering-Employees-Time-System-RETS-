@@ -7,7 +7,7 @@ Program generuje podsumowanie każdego dnia, uwzględniając czas wejścia i wyj
 Wyświetla informacje o czasie przepracowanym, ewentualnym nadgodzinach lub niedogodzinach.
 
 Uwzględnianie Przejścia do Następnej Doby:
-Program obsługuje sytuacje, w których czas wyjścia jest późniejszy niż czas wejścia, co oznacza przejście do następnej doby.
+Program obsługuje sytuacje, w których czas wyjścia jest wcześniejszy niż czas wejścia, co oznacza przejście do następnej doby.
 
 Pilnowanie Poprawności Formatu Godziny:
 Zapewnia, że wprowadzone godziny są w poprawnym formacie, co przeciwdziała błędom wprowadzenia.
