@@ -4,12 +4,9 @@
     {
         private static void Main(string[] args)
         {
-
-
             bool exitApp = false;
             while (!exitApp)
             {
-
                 try
                 {
                     Console.WriteLine("Program do monitorowania czasu pracy pracowników");
@@ -94,7 +91,7 @@
                                 {
                                     case "T":
                                         loop = true;
-                                        worker1time.TimeAdded += WorkerTimeAdded;
+                                      
                                         worker1time.AddCalculated24h(newTime1, newTime2);
                                         Console.WriteLine($"Dnia {ktorydzien} {user1.Name} {user1.Surname} był : {worker1time.Doba.Hours}h {worker1time.Doba.Minutes}min");
 
@@ -247,7 +244,7 @@
                                 {
                                     case "T":
                                         loop = true;
-                                        worker1time.TimeAdded += WorkerTimeAdded;
+                               
                                         worker1time.AddCalculated24h(newTime1, newTime2);
                                         Console.WriteLine($"Dnia {ktorydzien} {user1.Name} {user1.Surname} był : {worker1time.Doba.Hours}h {worker1time.Doba.Minutes}min");
                                         break;

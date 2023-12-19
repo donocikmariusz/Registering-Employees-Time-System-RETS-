@@ -2,7 +2,7 @@
 {
     public class HybridWorker : WorkerBase, IRets
     {
- 
+
         public override event TimeAddedDelegate TimeAdded;
         private List<TimeSpan> everyDayResult = new List<TimeSpan>();
         private readonly TimeSpan osiemGodzin = TimeSpan.FromHours(8);
@@ -14,9 +14,12 @@
         public string Intime { get; private set; }
         public string Outtime { get; private set; }
 
+        public TimeSpan Difference { get; private set; }
+        public TimeSpan Doba { get; private set; }
+
         public override void AddCalculated24h(DateTime newTime1, DateTime newTime2)
         {
-            TimeSpan doba = TimeSpan.FromHours(24);
+
             Doba = (TimeSpan.FromHours(24) - (newTime1 - newTime2));
             everyDayResult.Add(Doba);
             if (TimeAdded != null)
@@ -29,7 +32,7 @@
             Difference = newTime2 - newTime1;
             everyDayResult.Add(Difference);
 
-            if(TimeAdded != null)
+            if (TimeAdded != null)
             {
                 TimeAdded(this, new EventArgs());
             }
@@ -62,44 +65,12 @@
         public override Statistics GetStatistics()
         {
             var statistics = new Statistics();
-            statistics.CurrentDate = DateTime.Now;
-            statistics.OsiemGodzin = TimeSpan.FromHours(8);
-            int workHoursPerDay = 8;
-
-            statistics.DaysInCurrentMonth = DateTime.DaysInMonth(statistics.CurrentDate.Year, statistics.CurrentDate.Month);
-            statistics.CurrentMonthName = DateTime.Now.ToString("MMMM");
-            statistics.Workdays = CountWorkdaysInMonth(statistics.CurrentDate.Year, statistics.CurrentDate.Month);
-            statistics.TotalWorkDays = CalculateTotalWorkHoursInMonth(statistics.CurrentDate.Year, statistics.CurrentDate.Month, workHoursPerDay);
-            statistics.CalculateTotalWorkHoursInMonthFormatted = CalculateTotalWorkHoursInMonthFormatted(statistics.CurrentDate.Year, statistics.CurrentDate.Month, workHoursPerDay);
 
             foreach (TimeSpan totalWorkedTime in everyDayResult)
             {
                 statistics.TotalWorkedTime += totalWorkedTime;
             }
 
-            double ileHwmiesiacu = statistics.TotalWorkDays.TotalHours;
-
-            switch (statistics.TotalWorkedTime.TotalHours)
-
-            {
-                case double hours when hours == ileHwmiesiacu:
-                    statistics.SumAssesment = "Dziwna bardzo sytuacja. Pomyśl Dlaczego";
-                    break;
-
-                case var hours when hours >= 0 && hours < 25:
-                    statistics.SumAssesment = "Nieźle przegina, pokąsać go telefonem że za mało chodzi";
-                    break;
-
-                case var hours when hours >= 25 && hours < 125:
-                    statistics.SumAssesment = "Może być, nie czepiać się go";
-                    break;
-
-                case var hours when hours >= 125 && hours < 300:
-                    statistics.SumAssesment = "Dziwny gość, chyba nie ma rodziny tylko kota";
-                    break;
-                default:
-                    throw new Exception("Coś poszło nie tak...");
-            }
             return statistics;
         }
 
@@ -110,7 +81,7 @@
                 Console.WriteLine($"Liczba dni w bieżącym miesiącu: {statistics.DaysInCurrentMonth}");
                 Console.WriteLine($"Nazwa obecnego miesiąca: {statistics.CurrentMonthName}");
                 Console.WriteLine($"Ilość dni roboczych w bieżącym miesiącu: {statistics.Workdays}");
-                Console.WriteLine($"Łączna liczba godzin roboczych w bieżącym miesiącu: {statistics.CalculateTotalWorkHoursInMonthFormatted}");
+                Console.WriteLine($"Łączna liczba godzin roboczych w bieżącym miesiącu: {statistics.CalculateTotalWorkHoursInMonthFormatted2}");
                 Console.WriteLine($"Łączny czas przepracowany: {(int)statistics.TotalWorkedTime.TotalHours} h, {statistics.TotalWorkedTime.Minutes:D2} min");
                 Console.WriteLine($"Podsumowanie: {statistics.SumAssesment}");
                 Console.WriteLine();

@@ -17,10 +17,11 @@ namespace RETS
         }
         public string Intime { get; private set; }
         public string Outtime { get; private set; }
+        public TimeSpan Difference { get; private set; }
+        public TimeSpan Doba { get; private set; }
 
         public override void AddCalculated24h(DateTime newTime1, DateTime newTime2)
         {
-            TimeSpan doba = TimeSpan.FromHours(24);
             Doba = (TimeSpan.FromHours(24) - (newTime1 - newTime2));
             everyDayResult.Add(Doba);
 
@@ -105,60 +106,15 @@ namespace RETS
             return times;
         }
 
-
         public Statistics CountStatistics(List<TimeSpan> times)
         {
             var statistics = new Statistics();
-            statistics.CurrentDate = DateTime.Now;
-            statistics.OsiemGodzin = TimeSpan.FromHours(8);
-            int workHoursPerDay = 8;
-
-            statistics.DaysInCurrentMonth = DateTime.DaysInMonth(statistics.CurrentDate.Year, statistics.CurrentDate.Month);
-            statistics.CurrentMonthName = DateTime.Now.ToString("MMMM");
-            statistics.Workdays = CountWorkdaysInMonth(statistics.CurrentDate.Year, statistics.CurrentDate.Month);
-            statistics.TotalWorkDays = CalculateTotalWorkHoursInMonth(statistics.CurrentDate.Year, statistics.CurrentDate.Month, workHoursPerDay);
-            statistics.CalculateTotalWorkHoursInMonthFormatted = CalculateTotalWorkHoursInMonthFormatted(statistics.CurrentDate.Year, statistics.CurrentDate.Month, workHoursPerDay);
 
             foreach (TimeSpan totalWorkedTime in times)
             {
                 statistics.TotalWorkedTime += totalWorkedTime;
             }
 
-            double ileHwmiesiacu = statistics.TotalWorkDays.TotalHours;
-
-            switch (statistics.TotalWorkedTime.TotalHours)
-
-            {
-                case double hours when hours == ileHwmiesiacu:
-                    statistics.SumAssesment = "Przepracowano dokładnie tyle godzin ile ilczba godzin w miesiącu";
-                    break;
-
-                case var hours when hours >= 0 && hours < 25:
-                    statistics.SumAssesment = "Przepracowano od 0 do 24 godzin.";
-                    break;
-
-                case var hours when hours >= 25 && hours < 50:
-                    statistics.SumAssesment = "Przepracowano od 25 do 49 godzin.";
-                    break;
-
-                case var hours when hours >= 50 && hours < 75:
-                    statistics.SumAssesment = "Przepracowano od 50 do 74 godzin.";
-                    break;
-
-                case var hours when hours >= 75 && hours < 100:
-                    statistics.SumAssesment = "Przepracowano od 75 do 99 godzin.";
-                    break;
-
-                case var hours when hours >= 100 && hours < 125:
-                    statistics.SumAssesment = "Przepracowano od 100 do 124 godzin.";
-                    break;
-
-                case var hours when hours >= 125 && hours < 150:
-                    statistics.SumAssesment = "Przepracowano od 125 do 149 godzin.";
-                    break;
-                default:
-                    throw new Exception("Coś poszło nie tak...");
-            }
             return statistics;
         }
 
@@ -169,7 +125,7 @@ namespace RETS
                 Console.WriteLine($"Liczba dni w bieżącym miesiącu: {statistics.DaysInCurrentMonth}");
                 Console.WriteLine($"Nazwa obecnego miesiąca: {statistics.CurrentMonthName}");
                 Console.WriteLine($"Ilość dni roboczych w bieżącym miesiącu: {statistics.Workdays}");
-                Console.WriteLine($"Łączna liczba godzin roboczych w bieżącym miesiącu: {statistics.CalculateTotalWorkHoursInMonthFormatted}");
+                Console.WriteLine($"Łączna liczba godzin roboczych w bieżącym miesiącu: {statistics.CalculateTotalWorkHoursInMonthFormatted2}");
                 Console.WriteLine($"Łączny czas przepracowany: {(int)statistics.TotalWorkedTime.TotalHours} h, {statistics.TotalWorkedTime.Minutes:D2} min");
                 Console.WriteLine($"Podsumowanie: {statistics.SumAssesment}");
                 Console.WriteLine();
