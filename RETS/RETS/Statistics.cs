@@ -85,8 +85,11 @@ namespace RETS
                     case var hours when hours >= 25 && hours < 125:
                         return "Może być, nie czepiać się go";
 
-                    case var hours when hours >= 125 && hours < 300:
+                    case var hours when hours >= 125 && hours < 400:
                         return "Dziwny gość, chyba nie ma rodziny tylko kota";
+
+                    case var hours when hours >= 400 && hours < 300:
+                        return "Zagięcie czasoprzestrzeni";
 
                     default:
                         throw new Exception("Coś poszło nie tak...");
@@ -94,7 +97,7 @@ namespace RETS
             }
         }
         public TimeSpan Difference { get; private set; }
-        public List<TimeSpan> EveryDayResult { get; private set; }
+        public List<TimeSpan> EveryDayResult { get; set; }
         public TimeSpan Doba { get; private set; }
 
         public Statistics()
@@ -103,6 +106,7 @@ namespace RETS
             this.TotalWorkHours = TimeSpan.Zero;
             this.Doba = TimeSpan.Zero;
             this.Difference = TimeSpan.Zero;
+            this.EveryDayResult = new List<TimeSpan>();
         }
 
         public void AddTimeDifference(DateTime newTime1, DateTime newTime2)

@@ -4,7 +4,7 @@
     {
 
         public override event TimeAddedDelegate TimeAdded;
-        private List<TimeSpan> everyDayResult = new List<TimeSpan>();
+        private List<TimeSpan> EveryDayResult = new List<TimeSpan>();
         private readonly TimeSpan osiemGodzin = TimeSpan.FromHours(8);
         public HybridWorker(string intime, string outtime) : base(intime, outtime)
         {
@@ -21,7 +21,7 @@
         {
 
             Doba = (TimeSpan.FromHours(24) - (newTime1 - newTime2));
-            everyDayResult.Add(Doba);
+            EveryDayResult.Add(Doba);
             if (TimeAdded != null)
             {
                 TimeAdded(this, new EventArgs());
@@ -30,7 +30,7 @@
         public override void AddTimeDifference(DateTime newTime1, DateTime newTime2)
         {
             Difference = newTime2 - newTime1;
-            everyDayResult.Add(Difference);
+            EveryDayResult.Add(Difference);
 
             if (TimeAdded != null)
             {
@@ -43,21 +43,21 @@
             Console.WriteLine("Statystki z każdego dnia:");
             Console.WriteLine("");
 
-            for (int i = 0; i < everyDayResult.Count; i++)
+            for (int i = 0; i < EveryDayResult.Count; i++)
             {
-                if (osiemGodzin < everyDayResult[i])
+                if (osiemGodzin < EveryDayResult[i])
                 {
-                    TimeSpan overtime = everyDayResult[i] - osiemGodzin;
-                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(everyDayResult[i].Hours):D2} godzin {Math.Abs(everyDayResult[i].Minutes):D2} minut - nadczas wynosi {overtime.Hours} godzin {overtime.Minutes} minut");
+                    TimeSpan overtime = EveryDayResult[i] - osiemGodzin;
+                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(EveryDayResult[i].Hours):D2} godzin {Math.Abs(EveryDayResult[i].Minutes):D2} minut - nadczas wynosi {overtime.Hours} godzin {overtime.Minutes} minut");
                 }
-                else if (osiemGodzin > everyDayResult[i])
+                else if (osiemGodzin > EveryDayResult[i])
                 {
-                    TimeSpan undertime = osiemGodzin - everyDayResult[i];
-                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(everyDayResult[i].Hours):D2} godzin {Math.Abs(everyDayResult[i].Minutes):D2} minut - niedoczas wynosi: {undertime.Hours} godzin {undertime.Minutes} minut");
+                    TimeSpan undertime = osiemGodzin - EveryDayResult[i];
+                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(EveryDayResult[i].Hours):D2} godzin {Math.Abs(EveryDayResult[i].Minutes):D2} minut - niedoczas wynosi: {undertime.Hours} godzin {undertime.Minutes} minut");
                 }
                 else
                 {
-                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(everyDayResult[i].Hours):D2} godzin {Math.Abs(everyDayResult[i].Minutes):D2} czyli jest dokładny co do minuty");
+                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(EveryDayResult[i].Hours):D2} godzin {Math.Abs(EveryDayResult[i].Minutes):D2} czyli jest dokładny co do minuty");
                 }
             }
         }
@@ -66,7 +66,7 @@
         {
             var statistics = new Statistics();
 
-            foreach (TimeSpan totalWorkedTime in everyDayResult)
+            foreach (TimeSpan totalWorkedTime in EveryDayResult)
             {
                 statistics.TotalWorkedTime += totalWorkedTime;
             }
