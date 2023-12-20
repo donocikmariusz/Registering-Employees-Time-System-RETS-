@@ -34,7 +34,8 @@
                         default:
                             throw new Exception("Something went wrong...");
                     }
-
+                    Console.WriteLine("Naciśnij dowolny klawisz, aby zakończyć...");
+                    Console.ReadKey();
                 }
                 catch (Exception ex)
                 {
