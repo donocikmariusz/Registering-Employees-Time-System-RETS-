@@ -368,7 +368,7 @@
                     string userInput = Console.ReadLine();
                     if (!IsValidTime(userInput))
                     {
-                        throw new Exception("Błędny format godziny.Poprawny format to max 24 dla hh: max 60 dla mm.");
+                        throw new Exception("Błędny format godziny.Poprawny format to max 23 dla hh: max 59 dla mm.");
                     }
                     else
                     {
