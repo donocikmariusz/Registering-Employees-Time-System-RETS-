@@ -40,6 +40,7 @@ namespace RETS
             Difference = newTime2 - newTime1;
             everyDayResult.Add(Difference);
 
+
             if (TimeAdded != null)
             {
                 TimeAdded(this, new EventArgs());

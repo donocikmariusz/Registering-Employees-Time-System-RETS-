@@ -51,7 +51,8 @@
         {
             User user1 = new User("Jarosław", "Kaczyński");
             var worker1time = new ManufacturingWorker("", "");
-         
+            worker1time.TimeAdded += WorkerTimeAdded;
+
             var statistics = new Statistics();
             int ktorydzien = 1;
 
@@ -72,7 +73,7 @@
                     if (newTime2 > newTime1)
                     {
                         exitLoop = true;
-                        worker1time.TimeAdded += WorkerTimeAdded;
+                       
                         worker1time.AddTimeDifference(newTime1, newTime2);
                         Console.WriteLine($"Dnia {ktorydzien} {user1.Name} {user1.Surname} był : {worker1time.Difference.Hours}h {worker1time.Difference.Minutes}min");
                     }
@@ -113,6 +114,7 @@
                             }
                         }
                     }
+             
                     break;
                 }
 
@@ -207,6 +209,7 @@
             User user1 = new User("Zbigniew", "Stonoga");
             bool exitApp = false;
             var worker1time = new HybridWorker("", "");
+            worker1time.TimeAdded += WorkerTimeAdded;
             var statistics = new Statistics();
 
             while (!exitApp)
@@ -226,7 +229,7 @@
                     if (newTime2 > newTime1)
                     {
                         exitLoop = true;
-                        worker1time.TimeAdded += WorkerTimeAdded;
+                     
                         worker1time.AddTimeDifference(newTime1, newTime2);
                         Console.WriteLine($"Dnia {ktorydzien} {user1.Name} {user1.Surname} był : {worker1time.Difference.Hours}h {worker1time.Difference.Minutes}min");
                     }
