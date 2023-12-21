@@ -6,7 +6,7 @@ namespace RETS
     public class ManufacturingWorker : WorkerBase, IRets
     {
         private const string fileName = "times.txt";
-  
+
         private readonly TimeSpan eightHours = TimeSpan.FromHours(8);
         public ManufacturingWorker(string intime, string outtime) : base(intime, outtime)
         {
@@ -81,6 +81,32 @@ namespace RETS
             }
 
             return statistics;
+        }
+
+        public override void EveryDaySummary()
+        {
+            var timesFromFile = this.ReadTimesFromFile();
+            Console.WriteLine("Statystki z każdego dnia:");
+            Console.WriteLine("");
+            for (int i = 0; i < timesFromFile.Count; i++)
+            {
+                if (eightHours < timesFromFile[i])
+                {
+                    TimeSpan overtime = timesFromFile[i] - eightHours;
+                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(timesFromFile[i].Hours):D2} godzin {Math.Abs(timesFromFile[i].Minutes):D2} minut - nadczas wynosi {overtime.Hours} godzin {overtime.Minutes} minut");
+                }
+                else if (eightHours > timesFromFile[i])
+                {
+                    TimeSpan undertime = eightHours - timesFromFile[i];
+                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(timesFromFile[i].Hours):D2} godzin {Math.Abs(timesFromFile[i].Minutes):D2} minut - niedoczas wynosi: {undertime.Hours} godzin {undertime.Minutes} minut");
+                }
+                else
+                {
+                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(timesFromFile[i].Hours):D2} godzin {Math.Abs(timesFromFile[i].Minutes):D2} czyli jest dokładny co do minuty");
+                }
+            }
+
+
         }
     }
 }

@@ -65,6 +65,7 @@ namespace RETS
         }
         public TimeSpan TotalWorkedTime { get; set; }
 
+
         public TimeSpan eightHours
         {
             get
