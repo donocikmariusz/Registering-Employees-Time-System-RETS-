@@ -53,7 +53,7 @@
             User user = new User(firstName, lastName);
             worker.TimeAdded += WorkerTimeAdded;
 
-            var statistics = new Statistics();
+       //     var statistics = new Statistics();
             int counter = 1;
 
             bool exitApp = false;
@@ -89,7 +89,7 @@
 
                                 switch (input3)
                                 {
-                                    case "T":
+                                    case "Y":
                                         loop = true;
 
                                         worker.AddCalculated24h(newTime1, newTime2);
