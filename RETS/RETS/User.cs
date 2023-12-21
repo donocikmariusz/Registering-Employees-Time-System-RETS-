@@ -10,6 +10,7 @@
         public virtual string Name { get; private set; }
         public virtual string Surname { get; private set; }            
     }
+
 }
 
 

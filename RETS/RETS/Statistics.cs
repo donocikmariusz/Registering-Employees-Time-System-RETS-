@@ -25,12 +25,25 @@ namespace RETS
                 return 8;
             }
         }
+        public enum EnglishMonths
+        {
+            January, February, March, April, May, June, July, August, September, October, November, December
+        }
 
         public string CurrentMonthName
         {
             get
             {
-                return DateTime.Now.ToString("MMMM");
+                int currentMonth = DateTime.Now.Month;
+
+                if (Enum.IsDefined(typeof(EnglishMonths), currentMonth - 1))
+                {
+                    return ((EnglishMonths)(currentMonth - 1)).ToString();
+                }
+                else
+                {
+                    return "Unknown";
+                }
             }
         }
 
@@ -52,7 +65,7 @@ namespace RETS
         }
         public TimeSpan TotalWorkedTime { get; set; }
 
-        public TimeSpan OsiemGodzin
+        public TimeSpan eightHours
         {
             get
             {
@@ -77,34 +90,34 @@ namespace RETS
 
                 {
                     case double hours when hours == ileHwmiesiacu:
-                        return "Dziwna bardzo sytuacja. Pomyśl Dlaczego";
+                        return "Strange situation. Think Why";
 
                     case var hours when hours >= 0 && hours < 25:
-                        return "Nieźle przegina, pokąsać go telefonem że za mało chodzi";
+                        return "He's overdoing it quite a bit, try to bite him with a phone that doesn't work enough";
 
                     case var hours when hours >= 25 && hours < 125:
-                        return "Może być, nie czepiać się go";
+                        return "Can be, don't pick on him";
 
                     case var hours when hours >= 125 && hours < 400:
-                        return "Dziwny gość, chyba nie ma rodziny tylko kota";
+                        return "A strange guy, I don't think he has any family, only a cat probably";
 
                     case var hours when hours >= 400 && hours < 300:
-                        return "Zagięcie czasoprzestrzeni";
+                        return "Space-time has bent..";
 
                     default:
-                        throw new Exception("Coś poszło nie tak...");
+                        throw new Exception("sth went wrong...");
                 }
             }
         }
         public TimeSpan Difference { get; private set; }
         public List<TimeSpan> EveryDayResult { get; set; }
-        public TimeSpan Doba { get; private set; }
+        public TimeSpan Day { get; private set; }
 
         public Statistics()
         {
             this.TotalWorkedTime = TimeSpan.Zero;
             this.TotalWorkHours = TimeSpan.Zero;
-            this.Doba = TimeSpan.Zero;
+            this.Day = TimeSpan.Zero;
             this.Difference = TimeSpan.Zero;
             this.EveryDayResult = new List<TimeSpan>();
         }
@@ -117,11 +130,11 @@ namespace RETS
 
         public void AddCalculated24h(DateTime newTime1, DateTime newTime2)
         {
-            Doba = (TimeSpan.FromHours(24) - (newTime1 - newTime2));
-            this.EveryDayResult.Add(Doba);
+            Day = (TimeSpan.FromHours(24) - (newTime1 - newTime2));
+            this.EveryDayResult.Add(Day);
         }
 
-        // obliczenie ile godzin roboczych jest w danym miesiącu na podstawie jego ilości dni roboczych
+        // calculating how many working hours there are in a given month based on its number of working days
         public static TimeSpan CalculateTotalWorkHoursInMonth(int year, int month, int workHoursPerDay)
         {
             int totalWorkdays = CountWorkdaysInMonth(year, month);
@@ -145,7 +158,7 @@ namespace RETS
             return workdays;
         }
 
-        // zwrócenie całkowitej ilości dni w miesiącu oprócz sobót i niedziel (nie uwzględnia świąt)
+        // return the total number of days in a month except Saturdays and Sundays (does not include holidays)
         public static bool IsWorkday(DateTime date)
         {
             return date.DayOfWeek != DayOfWeek.Saturday && date.DayOfWeek != DayOfWeek.Sunday;
@@ -155,7 +168,7 @@ namespace RETS
         {
             int totalWorkdays = CountWorkdaysInMonth(year, month);
             int totalHours = totalWorkdays * workHoursPerDay;
-            return $"{totalHours} godzin";
+            return $"{totalHours} hours";
         }
     }
 }
