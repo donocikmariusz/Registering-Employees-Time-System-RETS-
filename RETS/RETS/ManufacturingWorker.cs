@@ -86,23 +86,23 @@ namespace RETS
         public override void EveryDaySummary()
         {
             var timesFromFile = this.ReadTimesFromFile();
-            Console.WriteLine("Statystki z każdego dnia:");
+            Console.WriteLine("Every day statistics:");
             Console.WriteLine("");
             for (int i = 0; i < timesFromFile.Count; i++)
             {
                 if (eightHours < timesFromFile[i])
                 {
                     TimeSpan overtime = timesFromFile[i] - eightHours;
-                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(timesFromFile[i].Hours):D2} godzin {Math.Abs(timesFromFile[i].Minutes):D2} minut - nadczas wynosi {overtime.Hours} godzin {overtime.Minutes} minut");
+                    Console.WriteLine($"Day {i + 1} was {Math.Abs(timesFromFile[i].Hours):D2} hours {Math.Abs(timesFromFile[i].Minutes):D2} minutes - overtime is {overtime.Hours} hours {overtime.Minutes} minutes");
                 }
                 else if (eightHours > timesFromFile[i])
                 {
                     TimeSpan undertime = eightHours - timesFromFile[i];
-                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(timesFromFile[i].Hours):D2} godzin {Math.Abs(timesFromFile[i].Minutes):D2} minut - niedoczas wynosi: {undertime.Hours} godzin {undertime.Minutes} minut");
+                    Console.WriteLine($"Day {i + 1} was {Math.Abs(timesFromFile[i].Hours):D2} hours {Math.Abs(timesFromFile[i].Minutes):D2} minut - undertime is: {undertime.Hours} hours {undertime.Minutes} minutes");
                 }
                 else
                 {
-                    Console.WriteLine($"Dnia {i + 1} był {Math.Abs(timesFromFile[i].Hours):D2} godzin {Math.Abs(timesFromFile[i].Minutes):D2} czyli jest dokładny co do minuty");
+                    Console.WriteLine($"Day {i + 1} was {Math.Abs(timesFromFile[i].Hours):D2} hours {Math.Abs(timesFromFile[i].Minutes):D2} - it is accurate down to the minute");
                 }
             }
 
