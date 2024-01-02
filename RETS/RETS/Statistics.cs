@@ -1,5 +1,4 @@
-﻿
-namespace RETS
+﻿namespace RETS
 {
     public class Statistics
     {
@@ -10,6 +9,7 @@ namespace RETS
                 return DateTime.Now;
             }
         }
+
         public int DaysInCurrentMonth
         {
             get
@@ -25,6 +25,7 @@ namespace RETS
                 return 8;
             }
         }
+
         public enum EnglishMonths
         {
             January, February, March, April, May, June, July, August, September, October, November, December
@@ -56,6 +57,7 @@ namespace RETS
         }
 
         public TimeSpan TotalWorkHours { get; private set; }
+
         public TimeSpan TotalWorkDays
         {
             get
@@ -63,16 +65,17 @@ namespace RETS
                 return CalculateTotalWorkHoursInMonth(this.CurrentDate.Year, this.CurrentDate.Month, this.WorkHoursPerDay);
             }
         }
+
         public TimeSpan TotalWorkedTime { get; set; }
 
-
-        public TimeSpan eightHours
+        public TimeSpan EightHours
         {
             get
             {
                 return TimeSpan.FromHours(8);
             }
         }
+
         public string CalculateTotalWorkHoursInMonthFormatted2
         {
             get
@@ -80,17 +83,18 @@ namespace RETS
                 return CalculateTotalWorkHoursInMonthFormatted(this.CurrentDate.Year, this.CurrentDate.Month, this.WorkHoursPerDay);
             }
         }
+
         public string TotalTimeFormatted { get; private set; }
+
         public string SumAssesment
         {
             get
             {
-                double ileHwmiesiacu = this.TotalWorkDays.TotalHours;
+                double hoursInMonth = this.TotalWorkDays.TotalHours;
 
                 switch (this.TotalWorkedTime.TotalHours)
-
                 {
-                    case double hours when hours == ileHwmiesiacu:
+                    case double hours when hours == hoursInMonth:
                         return "Strange situation. Think Why";
 
                     case var hours when hours >= 0 && hours < 25:
@@ -106,12 +110,15 @@ namespace RETS
                         return "Space-time has bent..";
 
                     default:
-                        throw new Exception("sth went wrong...");
+                        throw new Exception("Something went wrong...");
                 }
             }
         }
+
         public TimeSpan Difference { get; private set; }
+
         public List<TimeSpan> EveryDayResult { get; set; }
+
         public TimeSpan Day { get; private set; }
 
         public Statistics()
@@ -135,7 +142,6 @@ namespace RETS
             this.EveryDayResult.Add(Day);
         }
 
-        // calculating how many working hours there are in a given month based on its number of working days
         public static TimeSpan CalculateTotalWorkHoursInMonth(int year, int month, int workHoursPerDay)
         {
             int totalWorkdays = CountWorkdaysInMonth(year, month);
@@ -159,7 +165,6 @@ namespace RETS
             return workdays;
         }
 
-        // return the total number of days in a month except Saturdays and Sundays (does not include holidays)
         public static bool IsWorkday(DateTime date)
         {
             return date.DayOfWeek != DayOfWeek.Saturday && date.DayOfWeek != DayOfWeek.Sunday;
@@ -173,4 +178,3 @@ namespace RETS
         }
     }
 }
-

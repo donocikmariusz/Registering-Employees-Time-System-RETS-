@@ -1,18 +1,19 @@
-﻿
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace RETS
 {
     public class ManufacturingWorker : WorkerBase, IRets
     {
-        private const string fileName = "times.txt";
+        private const string FileName = "times.txt";
 
-        private readonly TimeSpan eightHours = TimeSpan.FromHours(8);
         public ManufacturingWorker(string intime, string outtime) : base(intime, outtime)
         {
             this.Intime = intime;
             this.Outtime = outtime;
         }
+
         public string Intime { get; private set; }
         public string Outtime { get; private set; }
         public TimeSpan Difference { get; private set; }
@@ -21,20 +22,21 @@ namespace RETS
         public override void AddCalculated24h(DateTime newTime1, DateTime newTime2)
         {
             Day = (TimeSpan.FromHours(24) - (newTime1 - newTime2));
-      
+
             this.OnTimeAdded();
-            using (var writer = File.AppendText(fileName))
+            using (var writer = File.AppendText(FileName))
             {
                 writer.WriteLine($"{Day.Hours}:{Day.Minutes:D2}");
             }
         }
+
         public override void AddTimeDifference(DateTime newTime1, DateTime newTime2)
         {
             Difference = newTime2 - newTime1;
-  
+
             this.OnTimeAdded();
 
-            using (var writer = File.AppendText(fileName))
+            using (var writer = File.AppendText(FileName))
             {
                 writer.WriteLine($"{Difference.Hours}:{Difference.Minutes:D2}");
             }
@@ -51,9 +53,9 @@ namespace RETS
         {
             var times = new List<TimeSpan>();
 
-            if (File.Exists(fileName))
+            if (File.Exists(FileName))
             {
-                using (var reader = File.OpenText(fileName))
+                using (var reader = File.OpenText(FileName))
                 {
                     var line = reader.ReadLine();
                     while (line != null)
@@ -86,27 +88,7 @@ namespace RETS
         public override void EveryDaySummary()
         {
             var timesFromFile = this.ReadTimesFromFile();
-            Console.WriteLine("Every day statistics:");
-            Console.WriteLine("");
-            for (int i = 0; i < timesFromFile.Count; i++)
-            {
-                if (eightHours < timesFromFile[i])
-                {
-                    TimeSpan overtime = timesFromFile[i] - eightHours;
-                    Console.WriteLine($"Day {i + 1} was {Math.Abs(timesFromFile[i].Hours):D2} hours {Math.Abs(timesFromFile[i].Minutes):D2} minutes - overtime is {overtime.Hours} hours {overtime.Minutes} minutes");
-                }
-                else if (eightHours > timesFromFile[i])
-                {
-                    TimeSpan undertime = eightHours - timesFromFile[i];
-                    Console.WriteLine($"Day {i + 1} was {Math.Abs(timesFromFile[i].Hours):D2} hours {Math.Abs(timesFromFile[i].Minutes):D2} minut - undertime is: {undertime.Hours} hours {undertime.Minutes} minutes");
-                }
-                else
-                {
-                    Console.WriteLine($"Day {i + 1} was {Math.Abs(timesFromFile[i].Hours):D2} hours {Math.Abs(timesFromFile[i].Minutes):D2} - it is accurate down to the minute");
-                }
-            }
-
-
+            EveryDaySummaryCommon(timesFromFile);
         }
     }
 }

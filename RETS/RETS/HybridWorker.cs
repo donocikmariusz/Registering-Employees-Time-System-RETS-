@@ -2,8 +2,8 @@
 {
     public class HybridWorker : WorkerBase, IRets
     {
-        private readonly TimeSpan eightHours = TimeSpan.FromHours(8);
         public List<TimeSpan> EveryDayResult = new List<TimeSpan>();
+
         public event TimeAddedDelegate TimeAdded;
         public HybridWorker(string intime, string outtime) : base(intime, outtime)
         {
@@ -22,6 +22,7 @@
             EveryDayResult.Add(Day);
             this.OnTimeAdded();
         }
+
         public override void AddTimeDifference(DateTime newTime1, DateTime newTime2)
         {
             Difference = newTime2 - newTime1;
@@ -43,26 +44,7 @@
 
         public override void EveryDaySummary()
         {
-            Console.WriteLine("Every day statistics:");
-            Console.WriteLine("");
-
-            for (int i = 0; i < EveryDayResult.Count; i++)
-            {
-                if (eightHours < EveryDayResult[i])
-                {
-                    TimeSpan overtime = EveryDayResult[i] - eightHours;
-                    Console.WriteLine($"Day {i + 1} was {Math.Abs(EveryDayResult[i].Hours):D2} hours {Math.Abs(EveryDayResult[i].Minutes):D2} minutes - overtime value {overtime.Hours} hours {overtime.Minutes} minutes");
-                }
-                else if (eightHours > EveryDayResult[i])
-                {
-                    TimeSpan undertime = eightHours - EveryDayResult[i];
-                    Console.WriteLine($"Day {i + 1} was {Math.Abs(EveryDayResult[i].Hours):D2} hours {Math.Abs(EveryDayResult[i].Minutes):D2} minut - undertime wynosi: {undertime.Hours} hours {undertime.Minutes} minutes");
-                }
-                else
-                {
-                    Console.WriteLine($"Day {i + 1} was {Math.Abs(EveryDayResult[i].Hours):D2} hours {Math.Abs(EveryDayResult[i].Minutes):D2} it is accurate down to the minute");
-                }
-            }
+            EveryDaySummaryCommon(EveryDayResult);
         }
     }
 }

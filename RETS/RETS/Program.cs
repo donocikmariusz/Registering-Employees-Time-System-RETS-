@@ -1,10 +1,12 @@
-﻿namespace RETS
+﻿using System;
+
+namespace RETS
 {
     internal class Program
     {
         private static void Main(string[] args)
         {
-            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             bool exitApp = false;
             while (!exitApp)
             {
@@ -17,9 +19,9 @@
                     Console.WriteLine("2. - Task-based (working hybrid - saving only to memory)");
                     Console.WriteLine("Your choice: (or 'q' or 'Q' to exit)");
 
-                    var wybor = Console.ReadLine().ToUpper();
+                    var choice = Console.ReadLine().ToUpper();
 
-                    switch (wybor)
+                    switch (choice)
                     {
                         case "1":
                             EnterTimes("Jarosław", "Kaczyński", new ManufacturingWorker("", ""));
@@ -36,7 +38,8 @@
                         default:
                             throw new Exception("Something went wrong...");
                     }
-
+                    Console.ResetColor();
+                    Console.WriteLine("");
                     Console.WriteLine("Press any key to close the app...");
                     Console.ReadKey();
                 }
@@ -63,6 +66,7 @@
 
                 while (!exitLoop)
                 {
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"Day: {counter}");
 
                     string intime = GetTimeFromUser("Enter the entry time in the format hh:mm:");
@@ -124,7 +128,6 @@
                 while (!checkinput)
                 {
                     Console.WriteLine("Press 'S' to view summary or 'Q' to exit or Enter to continue");
-                    Console.WriteLine();
                     try
                     {
                         ConsoleKeyInfo keyInfo = Console.ReadKey();
@@ -133,7 +136,7 @@
                         {
                             Console.WriteLine("");
                             checkinput = true;
-
+                            Console.ForegroundColor = ConsoleColor.Green;
                             worker.ShowStatistics();
 
                             bool input2a = false;
@@ -144,6 +147,7 @@
                                 {
                                     Console.WriteLine("View daily statistics? Y - YES, N - NO");
                                     var input2 = Console.ReadLine().ToUpper();
+                                    Console.WriteLine("");
                                     switch (input2)
                                     {
                                         case "Y":
@@ -174,25 +178,20 @@
                                 }
                             }
                         }
-
                         else if (keyInfo.Key == ConsoleKey.Q)
-
                         {
                             exitApp = true;
                             break;
                         }
-
                         else if (keyInfo.Key == ConsoleKey.Enter)
                         {
                             checkinput = true;
                         }
-
                         else
                         {
                             throw new Exception();
                         }
                     }
-
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
@@ -200,12 +199,13 @@
                 }
             }
         }
-        static void WorkerTimeAdded(object sender, EventArgs args)
+
+        private static void WorkerTimeAdded(object sender, EventArgs args)
         {
             Console.WriteLine("Worker time added OK!");
         }
 
-        static string GetTimeFromUser(string text)
+        private static string GetTimeFromUser(string text)
         {
             while (true)
             {
@@ -222,15 +222,14 @@
                         return userInput;
                     }
                 }
-
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                 }
-
             }
         }
-        static DateTime ParseTime(string timeString)
+
+        private static DateTime ParseTime(string timeString)
         {
             string[] formats = { "H:mm", "HH:mm" };
             DateTime.TryParseExact(timeString, formats, null, System.Globalization.DateTimeStyles.None, out DateTime time);
@@ -252,6 +251,5 @@
             }
             return false;
         }
-
     }
 }

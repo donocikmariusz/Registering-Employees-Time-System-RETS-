@@ -50,7 +50,7 @@ namespace RETS.Tests
             {
                 statistics.TotalWorkedTime += totalWorkedTime;
             }
-        
+
             Assert.AreEqual(16, (int)statistics.TotalWorkedTime.TotalHours);
         }
 
@@ -62,7 +62,7 @@ namespace RETS.Tests
 
             string assessment = statistics.SumAssesment;
 
-            Assert.AreEqual("Mo¿e byæ, nie czepiaæ siê go", assessment);
+            Assert.AreEqual("Can be, don't pick on him", assessment);
         }
     }
 }

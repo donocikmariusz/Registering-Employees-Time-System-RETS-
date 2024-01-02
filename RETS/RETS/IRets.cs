@@ -1,14 +1,12 @@
-﻿
-using static RETS.WorkerBase;
-
-namespace RETS
+﻿namespace RETS
 {
+    public delegate void TimeAddedDelegate(object sender, EventArgs args);
     public interface IRets
     {
-        string Intime { get;  }
+        string Intime { get; }
         string Outtime { get; }
-        public TimeSpan Difference { get;  }
-        public TimeSpan Day { get;  }
+        public TimeSpan Difference { get; }
+        public TimeSpan Day { get; }
         void AddTimeDifference(DateTime newTime1, DateTime newTime2);
         void AddCalculated24h(DateTime newTime1, DateTime newTime2);
         void EveryDaySummary();
