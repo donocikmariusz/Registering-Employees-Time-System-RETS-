@@ -3,6 +3,7 @@
     public class HybridWorker : WorkerBase, IRets
     {
         private readonly TimeSpan eightHours = TimeSpan.FromHours(8);
+        public List<TimeSpan> EveryDayResult = new List<TimeSpan>();
         public event TimeAddedDelegate TimeAdded;
         public HybridWorker(string intime, string outtime) : base(intime, outtime)
         {

@@ -2,8 +2,7 @@
 {
     public abstract class WorkerBase : IRets
     {
-        public List<TimeSpan> EveryDayResult = new List<TimeSpan>();
-   
+         
         public delegate void TimeAddedDelegate(object sender, EventArgs args);
         public event TimeAddedDelegate TimeAdded;
         public WorkerBase(string intime, string outtime)

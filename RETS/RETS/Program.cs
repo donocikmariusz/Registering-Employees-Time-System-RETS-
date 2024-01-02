@@ -4,6 +4,7 @@
     {
         private static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.Magenta;
             bool exitApp = false;
             while (!exitApp)
             {
@@ -13,7 +14,7 @@
                     Console.WriteLine("------------------------------------------------");
                     Console.WriteLine("Select employee type:");
                     Console.WriteLine("1. - Production (working in shifts - saving to a file)");
-                    Console.WriteLine("2. - Task-based (working hybrid - writing only to memory)");
+                    Console.WriteLine("2. - Task-based (working hybrid - saving only to memory)");
                     Console.WriteLine("Your choice: (or 'q' or 'Q' to exit)");
 
                     var wybor = Console.ReadLine().ToUpper();
@@ -53,7 +54,6 @@
             User user = new User(firstName, lastName);
             worker.TimeAdded += WorkerTimeAdded;
 
-       //     var statistics = new Statistics();
             int counter = 1;
 
             bool exitApp = false;

@@ -21,7 +21,7 @@ namespace RETS
         public override void AddCalculated24h(DateTime newTime1, DateTime newTime2)
         {
             Day = (TimeSpan.FromHours(24) - (newTime1 - newTime2));
-            EveryDayResult.Add(Day);
+      
             this.OnTimeAdded();
             using (var writer = File.AppendText(fileName))
             {
@@ -31,7 +31,7 @@ namespace RETS
         public override void AddTimeDifference(DateTime newTime1, DateTime newTime2)
         {
             Difference = newTime2 - newTime1;
-            EveryDayResult.Add(Difference);
+  
             this.OnTimeAdded();
 
             using (var writer = File.AppendText(fileName))
